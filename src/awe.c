@@ -1,13 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "jsmn.h"
+#include <string.h>
 
-void do_something(char * js)
+void print_type(int type)
+{
+  printf("%d\n", type);
+  if(type == JSMN_PRIMITIVE){
+    printf("JSMN_PRIMITIVE");
+  }else if(type == JSMN_OBJECT){
+    printf("OBJECT");
+  }else if(type == JSMN_ARRAY){
+    printf("Array");
+  }else if(type == JSMN_STRING){
+    printf("String");
+  }
+  printf("\n");
+}
+void do_something(char* js, long t_size)
 {
   jsmn_parser parser;
   jsmn_init(&parser);
-  //jsmntok_t tokens[10];
-  // , js, tokens, 10);
+  int _token_count = 10000;
+  jsmntok_t tokens[_token_count];
+  jsmnerr_t err = jsmn_parse(&parser, js, t_size, tokens, _token_count);
+  if(err < 0){printf("%d", err);}
+  int i;
+  for(i=4; i<err; i++)
+  {
+    printf("%d\n", tokens[i].size);
+    printf("%d-%d\n", tokens[i].start, tokens[i].end);
+    int diff = tokens[i].end - tokens[i].start;
+    char *sub_buffer[diff + 1];
+    memcpy(sub_buffer, js[tokens[i].start], tokens[i].end);
+    print_type(tokens[i].type);
+    printf(&sub_buffer);
+    printf("\n");
+    break;
+  }
 
 }
 int main(int argc, char* argv[])
@@ -22,6 +52,8 @@ int main(int argc, char* argv[])
   fread(string, _fsize, 1, _f);
   fclose(_f);
   string[_fsize]=0;
+
+  do_something(string, _fsize);
 
   return 0;
 
