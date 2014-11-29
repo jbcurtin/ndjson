@@ -26,13 +26,13 @@ void do_something(char* js, long t_size)
   jsmnerr_t err = jsmn_parse(&parser, js, t_size, tokens, _token_count);
   if(err < 0){printf("%d", err);}
   int i;
-  for(i=4; i<err; i++)
+  for(i=3; i<err; i++)
   {
     printf("%d\n", tokens[i].size);
     printf("%d-%d\n", tokens[i].start, tokens[i].end);
     int diff = tokens[i].end - tokens[i].start;
-    char *sub_buffer[diff + 1];
-    memcpy(sub_buffer, js[tokens[i].start], tokens[i].end);
+    char sub_buffer[diff + 1];
+    memcpy(sub_buffer, js, tokens[i].end);
     print_type(tokens[i].type);
     printf(&sub_buffer);
     printf("\n");
