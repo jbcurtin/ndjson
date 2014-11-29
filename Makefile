@@ -44,6 +44,7 @@ deps:
 	cd external-libs/jsmn && make test && make
 	cp $(EXTERNAL_LIBS)/jsmn/jsmn.h lib/
 	cp $(EXTERNAL_LIBS)/jsmn/libjsmn.a lib/
+	cp $(EXTERNAL_LIBS)/jsmn/jsmn.o lib/
 
 clean-deps:
 	rm -rf external-libs

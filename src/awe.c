@@ -4,8 +4,8 @@
 
 void do_something(char * js)
 {
-  jsmn_parser *parser;
-  jsmn_init(parser);
+  jsmn_parser parser;
+  jsmn_init(&parser);
   //jsmntok_t tokens[10];
   // , js, tokens, 10);
 
