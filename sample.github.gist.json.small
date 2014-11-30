@@ -1,0 +1,46 @@
+[
+  {
+    "url": "https://api.github.com/gists/a7d100bd87d3f4fe705b",
+    "forks_url": "https://api.github.com/gists/a7d100bd87d3f4fe705b/forks",
+    "commits_url": "https://api.github.com/gists/a7d100bd87d3f4fe705b/commits",
+    "id": "a7d100bd87d3f4fe705b",
+    "git_pull_url": "https://gist.github.com/a7d100bd87d3f4fe705b.git",
+    "git_push_url": "https://gist.github.com/a7d100bd87d3f4fe705b.git",
+    "html_url": "https://gist.github.com/a7d100bd87d3f4fe705b",
+    "files": {
+      "gistfile1.js": {
+        "filename": "gistfile1.js",
+        "type": "application/javascript",
+        "language": "JavaScript",
+        "raw_url": "https://gist.githubusercontent.com/mateuspv/a7d100bd87d3f4fe705b/raw/70476dd4d50ae15171261d56176a20e88c4e43cc/gistfile1.js",
+        "size": 605
+      }
+    },
+    "public": true,
+    "created_at": "2014-11-29T07:31:19Z",
+    "updated_at": "2014-11-29T07:31:20Z",
+    "description": "",
+    "comments": 0,
+    "user": null,
+    "comments_url": "https://api.github.com/gists/a7d100bd87d3f4fe705b/comments",
+    "owner": {
+      "login": "mateuspv",
+      "id": 4995440,
+      "avatar_url": "https://avatars.githubusercontent.com/u/4995440?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mateuspv",
+      "html_url": "https://github.com/mateuspv",
+      "followers_url": "https://api.github.com/users/mateuspv/followers",
+      "following_url": "https://api.github.com/users/mateuspv/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mateuspv/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mateuspv/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mateuspv/subscriptions",
+      "organizations_url": "https://api.github.com/users/mateuspv/orgs",
+      "repos_url": "https://api.github.com/users/mateuspv/repos",
+      "events_url": "https://api.github.com/users/mateuspv/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mateuspv/received_events",
+      "type": "User",
+      "site_admin": false
+    }
+  }
+]

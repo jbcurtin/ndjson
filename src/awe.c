@@ -1,68 +1,111 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "jsmn.h"
 #include <string.h>
+#include "json.h"
+#include "buf.h"
+#include "log.h"
 
-void print_type(int type)
+char URL[] = "https://api.github.com/users/jbcurtin";
+char *KEYS[] = {"name", "location", "public_repos", "hireable"};
+
+void extract_keys(char* js)
 {
-  printf("%d\n", type);
-  if(type == JSMN_PRIMITIVE){
-    printf("JSMN_PRIMITIVE");
-  }else if(type == JSMN_OBJECT){
-    printf("OBJECT");
-  }else if(type == JSMN_ARRAY){
-    printf("Array");
-  }else if(type == JSMN_STRING){
-    printf("String");
-  }
-  printf("\n");
-}
-void do_something(char* js, long t_size)
-{
-  jsmn_parser parser;
-  jsmn_init(&parser);
-  int _token_count = 10000;
-  jsmntok_t tokens[_token_count];
-  jsmnerr_t err = jsmn_parse(&parser, js, t_size, tokens, _token_count);
-  if(err < 0){printf("%d", err);}
-  int i;
-  for(i=3; i<err; i++)
+
+  jsmntok_t *tokens = json_tokenise(js);
+
+  typedef enum { START, KEY, PRINT, SKIP, STOP} parse_state;
+  parse_state state = START;
+
+  size_t object_tokens = 0;
+
+  for(size_t i = 0, j = 1; j>0; i++, j--)
   {
-    printf("%d\n", tokens[i].size);
-    printf("%d-%d\n", tokens[i].start, tokens[i].end);
-    int diff = tokens[i].end - tokens[i].start;
-    char sub_buffer[diff + 1];
-    memcpy(sub_buffer, js, tokens[i].end);
-    print_type(tokens[i].type);
-    printf(&sub_buffer);
-    printf("\n");
-    break;
+    jsmntok_t *t = &tokens[i];
+    log_assert(t->start != -1 && t->end !=-1);
+
+    if (t->type == JSMN_ARRAY || t->type == JSMN_OBJECT)
+      j += t->size;
+
+    switch (state)
+    {
+      case START:
+        if(t->type != JSMN_OBJECT)
+          log_die("Invalid response: root element must be an object.");
+
+        state = KEY;
+        object_tokens = t->size;
+
+        if (object_tokens == 0)
+          state = STOP;
+
+        if (object_tokens % 2 != 0)
+          log_die("Invalid respones:  object must have even number of children.");
+
+        break;
+
+      case KEY:
+        object_tokens--;
+
+        if (t->type != JSMN_STRING)
+          log_die("Invalid response: object keys must be strings");
+
+        state = SKIP;
+
+        for(size_t i = 0; i< sizeof(KEYS)/sizeof(char *); i++)
+        {
+          if (json_token_streq(js, t, KEYS[i]))
+          {
+            printf("%s: ", KEYS[i]);
+            state = PRINT;
+            break;
+          }
+        }
+          break;
+      case SKIP:
+          if (t->type != JSMN_STRING && t->type != JSMN_PRIMITIVE)
+            log_die("Invalid Response: object values must be strings or primitives.");
+
+          object_tokens--;
+          state = KEY;
+
+          if (object_tokens == 0)
+            state = STOP;
+
+          break;
+      case PRINT:
+          if (t->type != JSMN_STRING && t->type != JSMN_PRIMITIVE)
+            log_die("Invalid response: object values must be strings or primitives.");
+
+          char *str = json_token_tostr(js, t);
+          puts(str);
+
+          object_tokens--;
+          state = KEY;
+
+          if (object_tokens == 0)
+            state = STOP;
+
+          break;
+      case STOP:
+          break;
+      default:
+          log_die("Invalid state %u", state);
+    }
   }
-
 }
-int main(int argc, char* argv[])
-{
-
-  FILE *_f = fopen("sample.github.gist.json", "rb");
-  fseek(_f, 0, SEEK_END);
-  long _fsize = ftell(_f);
-  fseek(_f, 0, SEEK_SET);
-
-  char *string = malloc(_fsize +1);
-  fread(string, _fsize, 1, _f);
-  fclose(_f);
-  string[_fsize]=0;
-
-  do_something(string, _fsize);
-
-  return 0;
-
-  int i;
-  printf("size %lu\n", _fsize);
-  for(i=0; i<_fsize; i--)
-  {
-    printf("%c", string[i]);
-  }
-
-  return 0;
-}
+//int main(int argc, char* argv[])
+//{
+//  FILE *_f = fopen("sample", "r");
+//  fseek(_f, 0, SEEK_END);
+//  long _fsize = ftell(_f);
+//  fseek(_f, 0, SEEK_SET);
+//
+//  char *string = malloc(_fsize +1);
+//  fread(string, _fsize, 1, _f);
+//  fclose(_f);
+//  string[_fsize]=0;
+//
+//  extract_keys(string, _fsize); // {"awesome","sauce"}
+//
+//  return 0;
+//}

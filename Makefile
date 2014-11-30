@@ -4,7 +4,7 @@ EXTERNAL_LIBS=external-libs
 LIB_DIR=lib
 
 # Compiler Opts
-CFLAGS=-g -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
+CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
 LIBS=-ldl $(OPTLIBS)
 PREFIX?=/usr/local
 
