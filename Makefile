@@ -53,8 +53,9 @@ clean-all:
 	make clean-deps
 
 ### Testing ###
+DEBUG_FLAGS=-O0 -g
 main_tests: $(OBJECTS)
-	$(CC) tests/$@.c -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl
+	$(CC) -g -O3 tests/$@.c -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl
 tests: main_tests
 	sh ./tests/runtests.sh
 
