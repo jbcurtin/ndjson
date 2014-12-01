@@ -33,3 +33,5 @@ build
 external-libs
 sample
 tests/*_tests
+*.dSYM
+tests/*.log

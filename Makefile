@@ -24,8 +24,8 @@ SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 #$(SO_TARGET): $(TARGET) $(OBJECTS)
 #	$(CC) -shared -o $@ $(OBJECTS)
 
-valgrind:
-	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log"
+#valgrind:
+#	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log"
 
 build:
 	@mkdir -p $(BUILD_DIR)
@@ -55,7 +55,8 @@ clean-all:
 ### Testing ###
 DEBUG_FLAGS=-O0 -g
 main_tests: $(OBJECTS)
-	$(CC) -g -O3 tests/$@.c -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl
+	$(CC) tests/$@.c -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
+# -g -O0
 tests: main_tests
 	sh ./tests/runtests.sh
 
