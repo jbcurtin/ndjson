@@ -18,7 +18,7 @@ int main(void)//int argc, char* argv[])
   if (r < 1)
     log_die("File is Empty");
   fclose(_f);
-  string[_fsize] = '\0';
+  string[_fsize+1] = '\0';
 
   printf("Loaded Scritp\n");
   extract_keys(string);
