@@ -93,19 +93,3 @@ void extract_keys(char* js)
     }
   }
 }
-//int main(int argc, char* argv[])
-//{
-//  FILE *_f = fopen("sample", "r");
-//  fseek(_f, 0, SEEK_END);
-//  long _fsize = ftell(_f);
-//  fseek(_f, 0, SEEK_SET);
-//
-//  char *string = malloc(_fsize +1);
-//  fread(string, _fsize, 1, _f);
-//  fclose(_f);
-//  string[_fsize]=0;
-//
-//  extract_keys(string, _fsize); // {"awesome","sauce"}
-//
-//  return 0;
-//}

@@ -9,27 +9,20 @@ CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(
 LIBS=-ldl $(OPTLIBS)
 PREFIX?=/usr/local
 
-#SOURCES=$(wildcard src/**/*.c src/*.c)
-#OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
-
-TEST_SRC=$(wildcard tests/*_tests.c)
-TESTS=$(patsubst %.c,%,$(TEST_SRC))
+SOURCES=$(wildcard src/**/*.c src/*.c)
+OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 
 TARGET=$(BUILD_DIR)/libNDJson.a
 SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 
-all: $(TARGET) $(SO_TARGET) tests
-$(TARGET): CFLAGS += -fPIC
-$(TARGET): build $(OBJECTS)
-	ar rcs $@ $(OBJECTS)
-	ranlib $@
+#all: $(TARGET) $(SO_TARGET)
+#$(TARGET): CFLAGS += -fPIC
+#$(TARGET): build $(OBJECTS)
+#	ar rcs $@ $(OBJECTS)
+#	ranlib $@
 
-$(SO_TARGET): $(TARGET) $(OBJECTS)
-	$(CC) -shared -o $@ $(OBJECTS)
-
-tests: CFLAGS += $(TARGET)
-tests: $(TESTS)
-	sh ./tests/runtests.sh
+#$(SO_TARGET): $(TARGET) $(OBJECTS)
+#	$(CC) -shared -o $@ $(OBJECTS)
 
 valgrind:
 	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log"
@@ -58,4 +51,13 @@ clean:
 clean-all:
 	make clean
 	make clean-deps
+
+### Testing ###
+main_tests: $(OBJECTS)
+	$(CC) tests/$@.c -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl
+tests: main_tests
+	sh ./tests/runtests.sh
+
+#CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
+#CFLAGS=-Ilib -Isrc -g -std=c99 -O2 -Wall -Wextra -rdynamic
 

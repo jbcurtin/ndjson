@@ -32,3 +32,4 @@ build
 *.swp
 external-libs
 sample
+tests/*_tests
