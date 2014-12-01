@@ -19,9 +19,9 @@ void extract_keys(char* js)
 {
 
   jsmntok_t *tokens = json_tokenise(js);
-  print_token(&tokens[0], &js);
+  //print_token(&tokens[0], &js);
   exit(0);
-  abort();
+  //abort();
 
   typedef enum { START, KEY, PRINT, SKIP, STOP} parse_state;
   parse_state state = START;

@@ -8,7 +8,7 @@ int main(void)//int argc, char* argv[])
   printf("Test Checer Success");
   printf("\n");
 
-  FILE *_f = fopen("sample", "r");
+  FILE *_f = fopen("data/sample.json", "r");
   fseek(_f, 0, SEEK_END);
   size_t _fsize = ftell(_f);
   fseek(_f, 0, SEEK_SET);
