@@ -1,6 +1,7 @@
 -include config.mk
 # Pathing Varibles
 EXTERNAL_LIBS=external-libs
+BUILD_DIR=build
 LIB_DIR=lib
 
 # Compiler Opts
@@ -14,7 +15,7 @@ OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 TEST_SRC=$(wildcard tests/*_tests.c)
 TESTS=$(patsubst %.c,%,$(TEST_SRC))
 
-TARGET=build/libNDJson.a
+TARGET=$(BUILD_DIR)/libNDJson.a
 SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
 
 all: $(TARGET) $(SO_TARGET) tests
@@ -34,7 +35,7 @@ valgrind:
 	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log"
 
 build:
-	@mkdir -p build
+	@mkdir -p $(BUILD_DIR)
 	@mkdir -p bin
 
 deps:
@@ -51,7 +52,7 @@ clean-deps:
 	rm -rf lib
 
 clean:
-	rm -rf build
+	rm -rf $(BUILD_DIR)
 	rm -rf bin
 
 clean-all:
