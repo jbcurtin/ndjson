@@ -9,8 +9,8 @@ CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(
 LIBS=-ldl $(OPTLIBS)
 PREFIX?=/usr/local
 
-SOURCES=$(wildcard src/**/*.c src/*.c)
-OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
+#SOURCES=$(wildcard src/**/*.c src/*.c)
+#OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 
 TEST_SRC=$(wildcard tests/*_tests.c)
 TESTS=$(patsubst %.c,%,$(TEST_SRC))

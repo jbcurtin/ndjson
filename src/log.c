@@ -24,7 +24,7 @@ void log_info(char *msg, ...)
   log_null(msg);
 
   va_start(argp, msg);
-  vfprint(stderr, msg, argp);
+  vfprintf(stderr, msg, argp);
   va_end(argp);
 
   fprintf(stderr, "\n");
