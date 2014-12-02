@@ -11,17 +11,17 @@ char *KEYS[] = {"name", "location", "public_repos", "hireable"};
 void print_token(jsmntok_t *t, char* js)
 {
   int diff = t->end - t->start;
-  char *string;
-  memcpy(&string, &t[t->start], diff+1);
-  printf("%s", &string);
+  char *string = malloc(diff+1);
+  memcpy(string, &js[t->start], diff+1);
+  printf("Win");
+  //printf("%s", &string);
 }
 void extract_keys(char* js)
 {
 
   jsmntok_t *tokens = json_tokenise(js);
-  //print_token(&tokens[0], &js);
-  exit(0);
-  //abort();
+
+  print_token(&tokens[0], js);
 
   typedef enum { START, KEY, PRINT, SKIP, STOP} parse_state;
   parse_state state = START;

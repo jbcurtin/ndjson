@@ -1,2 +1,2 @@
-jsmn_parse: truncated JSON string
+Invalid response: root element must be an object.
 Aborted (core dumped)

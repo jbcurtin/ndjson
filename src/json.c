@@ -67,7 +67,8 @@ jsmntok_t * json_tokenise(char *js)
     log_null(tokens);
     ret = jsmn_parse(&parser, js, n, tokens, JSON_TOKENS);
   }
-
+  // TODO: Write in while loop that'll parse larger token sets. 
+  // The parser fails on to little tokens, such as JSON_TOKENS = 256
   if(ret == JSMN_ERROR_INVAL)
     log_die("jsmn_parse: invalid JSON string");
   if(ret == JSMN_ERROR_PART)
