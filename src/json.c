@@ -54,19 +54,18 @@ jsmntok_t * json_tokenise(char *js)
   jsmn_parser parser;
   jsmn_init(&parser);
 
-  unsigned int n = JSON_TOKENS;
+  unsigned int n = JSON_TOKENS + 1;
   jsmntok_t *tokens = malloc(sizeof(jsmntok_t) * n);
-  log_null(tokens);
-
-  int ret = jsmn_parse(&parser, js, n, tokens, JSON_TOKENS);
-
+  int ret = jsmn_parser(&parser, js, n, tokens, n);
   while(ret == JSMN_ERROR_NOMEM)
+  //|| ret == JSMN_ERROR_PART)
   {
     n = n * 2 + 1;
     tokens = realloc(tokens, sizeof(jsmntok_t) * n);
     log_null(tokens);
-    ret = jsmn_parse(&parser, js, n, tokens, JSON_TOKENS);
   }
+  log_null(tokens);
+  abort();
   // TODO: Write in while loop that'll parse larger token sets. 
   // The parser fails on to little tokens, such as JSON_TOKENS = 256
   if(ret == JSMN_ERROR_INVAL)
