@@ -5,9 +5,6 @@
 
 int main(void)//int argc, char* argv[])
 {
-  printf("Test Checer Success");
-  printf("\n");
-
   FILE *_f = fopen("data/sample.json", "r");
   fseek(_f, 0, SEEK_END);
   size_t _fsize = ftell(_f);
@@ -20,7 +17,7 @@ int main(void)//int argc, char* argv[])
   fclose(_f);
   string[_fsize+1] = '\0';
 
-  printf("Loaded Scritp\n");
+  printf("Loaded Script\n");
   extract_keys(string);
   return 0;
 }

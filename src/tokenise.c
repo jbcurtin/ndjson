@@ -8,23 +8,36 @@
 char URL[] = "https://api.github.com/users/jbcurtin";
 char *KEYS[] = {"name", "location", "public_repos", "hireable"};
 
-void print_token(jsmntok_t *t, char* js)
+void print_token(char* js, jsmntok_t* tokens, unsigned int tidx)
 {
-  int diff = t->end - t->start;
-  char *string = malloc(diff+1);
-  memcpy(string, &js[t->start], diff+1);
-  printf("Win");
-  //printf("%s", &string);
+  unsigned int diff = tokens[tidx].end - tokens[tidx].start;
+  char string[diff+1];
+  memcpy(string, &js[tokens[tidx].start], diff + 1);
+  string[diff] = '\0';
+  printf("%s\n", string);
 }
+
 void extract_keys(char* js)
 {
 
   jsmntok_t *tokens = json_tokenise(js);
 
-  print_token(&tokens[0], js);
-
   typedef enum { START, KEY, PRINT, SKIP, STOP} parse_state;
   parse_state state = START;
+
+  // TODO: Now that the parser is correctly implemented. 
+  // It's time to look into how to properly build the datastructure to 
+  // break down the data into an indexable content-type. 
+  //
+  // Dynamic Array - DArray
+  // http://c.learncodethehardway.org/book/ex34.html
+  // HashMap
+  // http://c.learncodethehardway.org/book/ex37.html
+  //
+  // Academic
+  // http://www.cs.utexas.edu/users/fussell/cs310h/lectures/Lecture_18-310h.pdf
+  // http://c.learncodethehardway.org/book/ex15.html
+  // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
 
   size_t object_tokens = 0;
 
@@ -34,13 +47,15 @@ void extract_keys(char* js)
     log_assert(t->start != -1 && t->end !=-1);
 
     if (t->type == JSMN_ARRAY || t->type == JSMN_OBJECT)
+    {
       j += t->size;
+    }
 
     switch (state)
     {
       case START:
         if(t->type != JSMN_OBJECT)
-          log_die("Invalid response: root element must be an object.");
+          log_die("Invalid response: root element must be an object.\n");
 
         state = KEY;
         object_tokens = t->size;
@@ -49,7 +64,7 @@ void extract_keys(char* js)
           state = STOP;
 
         if (object_tokens % 2 != 0)
-          log_die("Invalid respones:  object must have even number of children.");
+          log_die("Invalid respones:  object must have even number of children.\n");
 
         break;
 
