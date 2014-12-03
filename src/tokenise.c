@@ -25,9 +25,9 @@ void extract_keys(char* js)
   typedef enum { START, KEY, PRINT, SKIP, STOP} parse_state;
   parse_state state = START;
 
-  // TODO: Now that the parser is correctly implemented. 
-  // It's time to look into how to properly build the datastructure to 
-  // break down the data into an indexable content-type. 
+  // TODO: Now that the parser is correctly implemented.
+  // It's time to look into how to properly build the datastructure to
+  // break down the data into an indexable content-type.
   //
   // Dynamic Array - DArray
   // http://c.learncodethehardway.org/book/ex34.html
@@ -54,8 +54,14 @@ void extract_keys(char* js)
     switch (state)
     {
       case START:
-        if(t->type != JSMN_OBJECT)
-          log_die("Invalid response: root element must be an object.\n");
+        if(t->type != JSMN_OBJECT || t->type != JSMN_ARRAY)
+          log_die("Invalid response: root element must be an object or arry.\n");
+
+        if (t->type == JSMN_ARRAY)
+        {
+          printf("JSMN_ARRAY not supported");
+          abort()
+        }
 
         state = KEY;
         object_tokens = t->size;
