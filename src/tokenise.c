@@ -54,23 +54,29 @@ void extract_keys(char* js)
     switch (state)
     {
       case START:
-        if(t->type != JSMN_OBJECT || t->type != JSMN_ARRAY)
+        if(t->type != JSMN_OBJECT && t->type != JSMN_ARRAY)
+        {
           log_die("Invalid response: root element must be an object or arry.\n");
+        }
 
         if (t->type == JSMN_ARRAY)
         {
           printf("JSMN_ARRAY not supported");
-          abort()
+          abort();
         }
 
         state = KEY;
         object_tokens = t->size;
 
         if (object_tokens == 0)
+        {
           state = STOP;
+        }
 
         if (object_tokens % 2 != 0)
+        {
           log_die("Invalid respones:  object must have even number of children.\n");
+        }
 
         break;
 

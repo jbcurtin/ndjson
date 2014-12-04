@@ -1,10 +1,22 @@
-#ifndef _token_index_h
-#define _token_index_h
+#ifndef _jki_h
+#define _jki_h
+
+typedef struct {
+  unsigned int pos;
+  unsigned int toknext;
+  int toksuper;
+} jki_parser;
 
 typedef enum {
-  NGX_INVALID_KEY = -1
-} json_parse_error;
+  JKI_INVALID_KEY = -1,
+  JKI_NOMEM
+} jki_error;
 
+typedef enum {
+  JKI_ARRAY_KEY,
+  JKI_OBJECT_KEY,
+  JKI_NOTSURE
+} jki_key_type;
 /**
  * JSON token Key Description
  *  @param type type(object, array) If array, assume unsigned int. If object, assume char[n]
@@ -13,13 +25,17 @@ typedef enum {
  *  @param size end - start
  */
 typedef struct {
-  jsmntype_t type;
+  jki_key_type type;
   int start;
-  int ent;
+  int end;
   int size;
-} json_key_index;
+  int tok_super;
+} jki_token;
 
-json_parse_error json_key_parse(json_index_parser *parser, const char *index_string,
-    size_t len, json_key_index *indexes, unsigned int num_indexes);
+jki_error json_key_parse(jki_parser *parser, const char *string,
+    size_t len, jki_token *tokens, unsigned int num_tokens);
+
+void jki_init(jki_parser *parser);
 
 #endif
+
