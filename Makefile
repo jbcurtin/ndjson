@@ -43,13 +43,9 @@ TEST_SOURCES=$(wildcard tests/*_tests.c)
 TEST_TARGETS=$(patsubst %.c,%,$(TEST_SOURCES))
 
 test-build:
-	$(CC) -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
-#jki_parser_tests: tests/jki_parser_tests.c
-$(TEST_TARGETS): $(TEST_SOURCES)
-	$(CC) -o $@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g $@.c
+	$(CC) -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g -c -m32
+$(TEST_TARGETS): $(TEST_SOURCES) test-build
+	$(CC) -o $@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g $@.c -m32
 tests: $(TEST_TARGETS)
 	sh ./tests/runtests.sh
-
-#CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
-#CFLAGS=-Ilib -Isrc -g -std=c99 -O2 -Wall -Wextra -rdynamic
 
