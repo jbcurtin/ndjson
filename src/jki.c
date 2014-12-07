@@ -35,33 +35,32 @@ jki_error jki_parse(jki_parser *parser, const char *js,
   jki_token *token;
   jki_key_type jki_type;
   int count = 0;
-  int start;
-  char c;
+  int start = 0;
 
-  for(;parser->pos < len && js[parser->pos] != '\0'; parser->pos++)
+  for(;parser->pos < len && js[parser->pos] != '\0';)
   {
     if (tokens == NULL)
     {
       return count;
     }
-
     token     = jki_allocate_token(parser, tokens, num_tokens);
-    if (token == NULL)
+    if (token == NULL){
       return JKI_ERROR_NOMEM;
-    start     = parser->pos;
+    }
     jki_type  = JKI_ARRAY_KEY;
-    for(; parser->pos < len && js[parser->pos] != '\0'; parser->pos++)
+    for(; parser->pos < len && js[parser->pos] != '\0';)
     {
+      char c;
       c = js[parser->pos];
       if(c == ',')
       {
-        if(parser->pos == 0)
+        if(parser->pos == 0){
           return JKI_INVALID_KEY;
-        jki_fill_token(&token, jki_type, start, parser->pos - 2);
-        parser->toknext   = parser->pos + 1;
-        start             = parser->toknext;
+        }
+        jki_fill_token(token, jki_type, start, parser->pos - 1);
+        start             = ++parser->pos;
         count++;
-        continue;
+        break;
       } else if (c >= 48 && c <=57)
       {
         // 0-9
@@ -104,8 +103,11 @@ jki_error jki_parse(jki_parser *parser, const char *js,
       }
     }
   }
+  jki_fill_token(token, jki_type, start, parser->pos - 1);
+  count++;
   return count;
 }
+
 void jki_init(jki_parser *parser)
 {
   parser->pos       = 0;

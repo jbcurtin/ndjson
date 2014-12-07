@@ -87,7 +87,6 @@ void extract_keys(char* js)
           log_die("Invalid response: object keys must be strings");
 
         state = SKIP;
-
         for(size_t i = 0; i< sizeof(KEYS)/sizeof(char *); i++)
         {
           if (json_token_streq(js, t, KEYS[i]))

@@ -32,6 +32,8 @@ clean-deps:
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf bin
+	#rm -rf ./tests/*_tests
+	#rm -rf ./src/*.o
 
 clean-all:
 	make clean
@@ -43,9 +45,9 @@ TEST_SOURCES=$(wildcard tests/*_tests.c)
 TEST_TARGETS=$(patsubst %.c,%,$(TEST_SOURCES))
 
 test-build:
-	$(CC) -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g -c -m32
+	cd src && $(CC) -I. -I../lib *.c -g -c -lcurl -std=c99
 $(TEST_TARGETS): $(TEST_SOURCES) test-build
-	$(CC) -o $@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g $@.c -m32
+	$(CC) -o $@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g $@.c -std=c99
 tests: $(TEST_TARGETS)
 	sh ./tests/runtests.sh
 
