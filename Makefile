@@ -12,21 +12,6 @@ PREFIX?=/usr/local
 SOURCES=$(wildcard src/**/*.c src/*.c)
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 
-TARGET=$(BUILD_DIR)/libNDJson.a
-SO_TARGET=$(patsubst %.a,%.so,$(TARGET))
-
-#all: $(TARGET) $(SO_TARGET)
-#$(TARGET): CFLAGS += -fPIC
-#$(TARGET): build $(OBJECTS)
-#	ar rcs $@ $(OBJECTS)
-#	ranlib $@
-
-#$(SO_TARGET): $(TARGET) $(OBJECTS)
-#	$(CC) -shared -o $@ $(OBJECTS)
-
-#valgrind:
-#	VALGRIND="valgrind --log-file=/tmp/valgrind-%p.log"
-
 build:
 	@mkdir -p $(BUILD_DIR)
 	@mkdir -p bin
@@ -59,12 +44,10 @@ TEST_TARGETS=$(patsubst %.c,%,$(TEST_SOURCES))
 
 test-build:
 	$(CC) -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
-#$(TEST_TARGETS): $(TEST_SOURCES) test-build
-#	$(CC) -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
-#tests: $(TEST_TARGETS)
-jki-tests: tests/jki_parser_tests.c
-	$(CC) -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
-tests: jki-tests
+#jki_parser_tests: tests/jki_parser_tests.c
+$(TEST_TARGETS): $(TEST_SOURCES)
+	$(CC) -o $@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g $@.c
+tests: $(TEST_TARGETS)
 	sh ./tests/runtests.sh
 
 #CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
