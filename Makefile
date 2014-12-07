@@ -54,10 +54,17 @@ clean-all:
 
 ### Testing ###
 DEBUG_FLAGS=-O0 -g
-main_tests: $(OBJECTS)
-	$(CC) tests/$@.c -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
-# -g -O0
-tests: main_tests
+TEST_SOURCES=$(wildcard tests/*_tests.c)
+TEST_TARGETS=$(patsubst %.c,%,$(TEST_SOURCES))
+
+test-build:
+	$(CC) -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
+#$(TEST_TARGETS): $(TEST_SOURCES) test-build
+#	$(CC) -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
+#tests: $(TEST_TARGETS)
+jki-tests: tests/jki_parser_tests.c
+	$(CC) -o tests/$@ -Isrc -Ilib ./src/*.o ./lib/*.o -lcurl -g
+tests: jki-tests
 	sh ./tests/runtests.sh
 
 #CFLAGS=./lib/*.o -Ilib -g -std=c99 -O2 -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)

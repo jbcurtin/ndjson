@@ -8,14 +8,17 @@ typedef struct {
 } jki_parser;
 
 typedef enum {
-  JKI_INVALID_KEY = -1,
-  JKI_NOMEM
+  JKI_INVALID_KEY         = -1,
+  JKI_ERROR_NOMEM         = -2,
+  JKI_NOT_SUPPORTED       = -3,
+  JKI_ERROR_INVALID_KEY   = -4,
+  JKI_ERROR_INVALID_CHAR  = -5
 } jki_error;
 
 typedef enum {
-  JKI_ARRAY_KEY,
-  JKI_OBJECT_KEY,
-  JKI_NOTSURE
+  JKI_ARRAY_KEY   = 1,
+  JKI_OBJECT_KEY  = 2,
+  JKI_NOTSURE     = 3,
 } jki_key_type;
 /**
  * JSON token Key Description
@@ -29,10 +32,11 @@ typedef struct {
   int start;
   int end;
   int size;
+  unsigned int int_counter;
   int tok_super;
 } jki_token;
 
-jki_error json_key_parse(jki_parser *parser, const char *string,
+jki_error jki_parse(jki_parser *parser, const char *string,
     size_t len, jki_token *tokens, unsigned int num_tokens);
 
 void jki_init(jki_parser *parser);

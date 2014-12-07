@@ -3,7 +3,7 @@
 #include "tokenise.h"
 #include "log.h"
 
-int main_bas(void)//int argc, char* argv[])
+int main(void)//int argc, char* argv[])
 {
   FILE *_f = fopen("data/sample.json", "r");
   fseek(_f, 0, SEEK_END);
