@@ -74,7 +74,6 @@ jki_error jki_parse(jki_parser *parser, const char *js,
         continue;
       } else if (c == '\\')
       {
-        return JKI_NOT_SUPPORTED;
         int i;
         parser->pos++;
         jki_type          = JKI_OBJECT_KEY;
